@@ -29,7 +29,7 @@ jobs:
       SUPABASE_PROJECT_REF: ${{ secrets.SUPABASE_PROJECT_REF }}
     steps:
       - name: Harden runner
-        uses: step-security/harden-runner@6c3c2f2c1c457b00c10c4848d6f5491db3b629df # v2.18.0
+        uses: step-security/harden-runner@a5ad31d6a139d249332a2605b85202e8c0b78450 # v2.19.1
         with:
           egress-policy: audit
 
@@ -37,7 +37,7 @@ jobs:
       # auto-commit step pushes regenerated types back to main.
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2  # zizmor: ignore[artipacked]
 
-      - uses: supabase/setup-cli@b60b5899c73b63a2d2d651b1e90db8d4c9392f51 # v1.6.0
+      - uses: supabase/setup-cli@df56b21da46c98abb12a9804e4fb1f657773e333 # v2.0.0
         with:
           version: 2.48.3
 
