@@ -51,6 +51,25 @@ _Last updated: 2026-04-18_
 
 > Brief entry per agent session. Most recent first.
 
+### 2026-05-15 — Codex (test gap detection: deploy/runtime package guards)
+
+**Goal**: Add a focused regression test for recent deploy/runtime fixes that landed without automated coverage.
+
+**What changed**:
+
+- Added `scripts/runtime-package-contract.test.mjs` to lock two recent fixes in place:
+  - root `prepare` stays `husky || true` for prod installs without Husky
+  - agents OpenTelemetry imports remain in `dependencies`, not `devDependencies`
+
+**Validation**:
+
+- `node --test scripts/runtime-package-contract.test.mjs` ✅
+- `git diff --check` ✅
+- `pnpm --filter @sentinel/agents test -- runtime-package-contract.test.ts` could not run because this worktree does not have package-local `node_modules`
+- `pnpm --filter @sentinel/agents lint` is currently failing from the same missing-dependencies state plus pre-existing TypeScript issues in the worktree environment
+
+**Decisions**: Kept the test dependency-free under `node:test` instead of Vitest so it can run in this worktree without broad install/setup changes.
+
 ### 2026-04-18 — Claude (AI workflow playbooks)
 
 **Goal**: Land the three "adopt now" doc deliverables from the April 2026 deep-research audit that Phases 1–4 (PRs #349–#352) did not cover.
