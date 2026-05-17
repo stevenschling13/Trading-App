@@ -51,24 +51,26 @@ _Last updated: 2026-04-18_
 
 > Brief entry per agent session. Most recent first.
 
-### 2026-05-15 — Codex (test gap detection: deploy/runtime package guards)
+### 2026-05-15 — Codex (test gap detection: deploy/runtime guards)
 
-**Goal**: Add a focused regression test for recent deploy/runtime fixes that landed without automated coverage.
+**Goal**: Add focused regression tests for recent deploy/runtime fixes that landed without automated coverage.
 
 **What changed**:
 
 - Added `scripts/runtime-package-contract.test.mjs` to lock two recent fixes in place:
   - root `prepare` stays `husky || true` for prod installs without Husky
   - agents OpenTelemetry imports remain in `dependencies`, not `devDependencies`
+- Added `scripts/health-check-redirect.test.mjs` to execute the real `scripts/health-check.sh` against a local 308 redirect and confirm it follows through to the final 200 response instead of failing early on the redirect status.
 
 **Validation**:
 
 - `node --test scripts/runtime-package-contract.test.mjs` ✅
+- `node --test scripts/health-check-redirect.test.mjs` ✅
 - `git diff --check` ✅
 - `pnpm --filter @sentinel/agents test -- runtime-package-contract.test.ts` could not run because this worktree does not have package-local `node_modules`
 - `pnpm --filter @sentinel/agents lint` is currently failing from the same missing-dependencies state plus pre-existing TypeScript issues in the worktree environment
 
-**Decisions**: Kept the test dependency-free under `node:test` instead of Vitest so it can run in this worktree without broad install/setup changes.
+**Decisions**: Kept the tests dependency-free under `node:test` instead of Vitest so they can run in this worktree without broad install/setup changes.
 
 ### 2026-04-18 — Claude (AI workflow playbooks)
 
